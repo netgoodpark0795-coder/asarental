@@ -125,16 +125,17 @@
     </div>
   </section>
 
-  <!-- 블로그 소식: 자리만 (다음에 연결) -->
+  <!-- 블로그 소식: blog.json(네이버 블로그 최신 글, 자동 업데이트)에서 채움 -->
   <section class="section" id="blog">
     <div class="wrap">
       <h2>블로그 소식</h2>
-      <p class="section-lead">새 글이 올라오면 여기에 보입니다.</p>
-      <div class="slots three">
-        <div class="slot" data-slot="blog-1"><p>글 준비 중</p></div>
-        <div class="slot" data-slot="blog-2"><p>글 준비 중</p></div>
-        <div class="slot" data-slot="blog-3"><p>글 준비 중</p></div>
+      <p class="section-lead">네이버 블로그에 올린 최신 글입니다.</p>
+      <div class="slots three" id="blog-list">
+        <div class="slot" data-slot="blog-1"><p>글을 불러오는 중</p></div>
+        <div class="slot" data-slot="blog-2"><p>글을 불러오는 중</p></div>
+        <div class="slot" data-slot="blog-3"><p>글을 불러오는 중</p></div>
       </div>
+      <a class="blog-more" href="https://blog.naver.com/djpark_kr" target="_blank" rel="noopener">블로그 전체 보기</a>
     </div>
   </section>
 
@@ -229,6 +230,32 @@
       label.textContent = '지금 ' + (h > 12 ? '오후 ' + (h - 12) : (h === 12 ? '오후 12' : '오전 ' + h)) + ':' + String(m).padStart(2, '0');
       marker.hidden = false;
     } catch (e) { /* 표시만 생략 */ }
+  })();
+
+  // 블로그 소식: blog.json 의 최신 글 3개로 칸 채우기. 못 불러오면 블로그 링크만 남김
+  (function () {
+    var list = document.getElementById('blog-list');
+    fetch('blog.json', { cache: 'no-cache' })
+      .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+      .then(function (data) {
+        var posts = (data && data.posts) || [];
+        if (!posts.length) throw new Error('empty');
+        list.textContent = '';
+        posts.slice(0, 3).forEach(function (p) {
+          var a = document.createElement('a');
+          a.className = 'slot post';
+          a.href = p.link; a.target = '_blank'; a.rel = 'noopener';
+          var t = document.createElement('time');
+          t.dateTime = p.date; t.textContent = p.date.replace(/-/g, '. ') + '.';
+          var h = document.createElement('h3');
+          h.textContent = p.title;
+          a.appendChild(t); a.appendChild(h);
+          list.appendChild(a);
+        });
+      })
+      .catch(function () {
+        list.innerHTML = '<div class="slot"><p>최신 글은 아래 블로그에서 볼 수 있습니다.</p></div>';
+      });
   })();
 </script>
 

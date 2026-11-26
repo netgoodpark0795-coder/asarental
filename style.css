@@ -131,6 +131,15 @@ p { margin: 0; }
 }
 .slot h3 { font-size: 18px; }
 .slot p { font-size: 15px; color: var(--graphite); }
+/* 채워진 블로그 글: 실선 = 내용 있음, 누르면 블로그로 이동 */
+.slot.post { border: 1px solid var(--line); border-top: 4px solid var(--sun); background: var(--white); text-decoration: none; justify-content: flex-start; gap: 6px; }
+.slot.post time { font-size: 14px; font-weight: 600; color: var(--deep); font-variant-numeric: tabular-nums; }
+.slot.post h3 { font-size: 17px; line-height: 1.5; }
+.slot.post:hover h3 { text-decoration: underline; }
+.blog-more {
+  display: inline-flex; align-items: center; min-height: 48px; margin-top: 16px; padding: 0 20px;
+  border: 2px solid var(--deep); border-radius: 10px; color: var(--deep); font-weight: 700; text-decoration: none;
+}
 
 /* 자주 묻는 질문 */
 .faq { border-top: 2px solid var(--ink); }
